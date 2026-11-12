@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Conversor simples de Real brasileiro para Peso argentino com cotação de referência atualizada automaticamente.">
+  <title>Real → Peso Argentino | Conversor</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--muted:#93a4bb;--text:#f4f7fb;--accent:#67e8b5;--line:#26354c}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#172943 0%,var(--bg) 58%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:grid;place-items:center;padding:24px}
+    main{width:min(100%,480px)}
+    .brand{display:flex;align-items:center;gap:10px;margin:0 0 22px 4px;color:#c6d2e2;font-size:14px;letter-spacing:.04em}
+    .brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#183c3a;color:var(--accent);font-weight:800;font-size:18px}
+    .card{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 24px 80px #0005}
+    h1{font-size:clamp(25px,6vw,32px);line-height:1.12;margin:0 0 8px;letter-spacing:-.04em}
+    .sub{color:var(--muted);font-size:14px;margin:0 0 28px}
+    label{display:block;color:#b8c6d8;font-size:13px;font-weight:650;margin-bottom:10px}
+    .input-wrap{display:flex;align-items:center;background:#0c1627;border:1px solid #34445d;border-radius:15px;padding:0 16px;transition:border .2s,box-shadow .2s}
+    .input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px #67e8b522}
+    .prefix{color:#b5c4d8;font-size:18px;font-weight:650;margin-right:10px}
+    input{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:600 27px/1.3 inherit;padding:17px 0}
+    input::placeholder{color:#586980}
+    .pair{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:13px;margin:19px 0}
+    .arrow{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1c2b40;color:var(--accent);font-size:17px}
+    .result{background:linear-gradient(135deg,#123b37,#102b32);border:1px solid #28645a;border-radius:17px;padding:19px 18px;margin-top:0}
+    .result-label{color:#b9d8d0;font-size:13px;margin-bottom:9px}
+    .amount{font-size:clamp(29px,8vw,39px);font-weight:750;letter-spacing:-.04em;overflow-wrap:anywhere;color:#eafff7}
+    .currency{font-size:15px;color:#b9d8d0;font-weight:600;margin-left:5px}
+    .rate{font-size:13px;color:#c1d1df;margin-top:12px;line-height:1.5}
+    .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin:19px 2px 0;line-height:1.5}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+    .dot.error{background:#f6b56a}
+    .foot{color:#708198;font-size:11px;line-height:1.5;text-align:center;margin:17px 12px 0}
+    .foot a{color:#9db3ca}
+    @media(max-width:420px){body{padding:16px}.card{padding:22px;border-radius:20px}}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand"><span class="brand-mark">↗</span><span>CONVERSOR DE MOEDAS</span></div>
+    <section class="card" aria-label="Conversor de real para peso argentino">
+      <h1>Real para Peso Argentino</h1>
+      <p class="sub">Conversão rápida pela cotação de referência.</p>
+
+      <label for="brl">Valor em reais (BRL)</label>
+      <div class="input-wrap">
+        <span class="prefix">R$</span>
+        <input id="brl" type="number" inputmode="decimal" min="0" step="any" placeholder="100,00" value="100" autocomplete="off" aria-label="Valor em reais">
+      </div>
+
+      <div class="pair"><span>🇧🇷 BRL</span><span class="arrow" aria-hidden="true">↓</span><span>🇦🇷 ARS</span></div>
+
+      <div class="result" aria-live="polite">
+        <div class="result-label">Você recebe aproximadamente</div>
+        <div><span class="amount" id="ars">Carregando…</span><span class="currency">ARS</span></div>
+        <div class="rate" id="rate">Buscando cotação de referência…</div>
+      </div>
+
+      <div class="status" role="status"><span class="dot" id="dot"></span><span id="status">Conectando à fonte de cotação…</span></div>
+    </section>
+    <p class="foot">Cotação de referência BRL/ARS. É uma taxa indicativa e pode diferir do valor praticado por bancos, cartões e casas de câmbio. Sem taxas ou margens incluídas.</p>
+  </main>
+
+  <script>
+    const input = document.getElementById('brl');
+    const output = document.getElementById('ars');
+    const rateText = document.getElementById('rate');
+    const statusText = document.getElementById('status');
+    const dot = document.getElementById('dot');
+    let arsPerBrl = null;
+    let lastUpdated = null;
+
+    const money = (value, currency, maximumFractionDigits = 2) =>
+      new Intl.NumberFormat('pt-BR', { style: 'currency', currency, maximumFractionDigits }).format(value);
+
+    function render() {
+      const brl = Number(input.value);
+      if (!Number.isFinite(brl) || brl < 0 || input.value.trim() === '') {
+        output.textContent = '—';
+        return;
+      }
+      if (arsPerBrl === null) {
+        output.textContent = '…';
+        return;
+      }
+      output.textContent = new Intl.NumberFormat('pt-BR', {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      }).format(brl * arsPerBrl);
+    }
+
+    async function loadRate() {
+      statusText.textContent = 'Atualizando cotação de referência…';
+      dot.classList.remove('error');
+      try {
+        // Endpoint público, sem chave: taxa mais recente com BRL como moeda-base.
+        const response = await fetch('https://open.er-api.com/v6/latest/BRL', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Falha HTTP ' + response.status);
+        const data = await response.json();
+        if (data.result !== 'success' || !data.rates || !Number.isFinite(data.rates.ARS)) {
+          throw new Error('Cotação BRL/ARS indisponível');
+        }
+        arsPerBrl = data.rates.ARS;
+        lastUpdated = data.time_last_update_utc || '';
+        render();
+        const updated = lastUpdated ? new Date(lastUpdated).toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short', timeZone:'UTC' }) + ' UTC' : 'horário não informado';
+        rateText.textContent = '1 BRL = ' + new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(arsPerBrl) + ' ARS';
+        statusText.textContent = 'Cotação atualizada: ' + updated + '. Atualização automática a cada 30 minutos.';
+      } catch (error) {
+        dot.classList.add('error');
+        statusText.textContent = arsPerBrl === null
+          ? 'Não foi possível carregar a cotação. Verifique sua conexão e tente novamente.'
+          : 'Sem conexão para atualizar. Exibindo a última cotação carregada.';
+        if (arsPerBrl === null) {
+          output.textContent = 'Indisponível';
+          rateText.textContent = 'A cotação será exibida quando a conexão for restabelecida.';
+        }
+      }
+    }
+
+    input.addEventListener('input', render);
+    loadRate();
+    setInterval(loadRate, 30 * 60 * 1000);
+  </script>
+</body>
+</html>
