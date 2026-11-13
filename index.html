@@ -2,126 +2,304 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1220">
-  <meta name="description" content="Conversor simples de Real brasileiro para Peso argentino com cotação de referência atualizada automaticamente.">
-  <title>Real → Peso Argentino | Conversor</title>
+  <meta name="description" content="Conversor de Real brasileiro para Peso argentino com cotação de referência atualizada automaticamente.">
+  <meta name="color-scheme" content="dark">
+  <title>Conversor BRL → ARS | TEC SOLUTION</title>
   <style>
-    :root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--muted:#93a4bb;--text:#f4f7fb;--accent:#67e8b5;--line:#26354c}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#172943 0%,var(--bg) 58%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:grid;place-items:center;padding:24px}
-    main{width:min(100%,480px)}
-    .brand{display:flex;align-items:center;gap:10px;margin:0 0 22px 4px;color:#c6d2e2;font-size:14px;letter-spacing:.04em}
-    .brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#183c3a;color:var(--accent);font-weight:800;font-size:18px}
-    .card{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 24px 80px #0005}
-    h1{font-size:clamp(25px,6vw,32px);line-height:1.12;margin:0 0 8px;letter-spacing:-.04em}
-    .sub{color:var(--muted);font-size:14px;margin:0 0 28px}
-    label{display:block;color:#b8c6d8;font-size:13px;font-weight:650;margin-bottom:10px}
-    .input-wrap{display:flex;align-items:center;background:#0c1627;border:1px solid #34445d;border-radius:15px;padding:0 16px;transition:border .2s,box-shadow .2s}
-    .input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px #67e8b522}
-    .prefix{color:#b5c4d8;font-size:18px;font-weight:650;margin-right:10px}
-    input{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:600 27px/1.3 inherit;padding:17px 0}
-    input::placeholder{color:#586980}
-    .pair{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:13px;margin:19px 0}
-    .arrow{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1c2b40;color:var(--accent);font-size:17px}
-    .result{background:linear-gradient(135deg,#123b37,#102b32);border:1px solid #28645a;border-radius:17px;padding:19px 18px;margin-top:0}
-    .result-label{color:#b9d8d0;font-size:13px;margin-bottom:9px}
-    .amount{font-size:clamp(29px,8vw,39px);font-weight:750;letter-spacing:-.04em;overflow-wrap:anywhere;color:#eafff7}
-    .currency{font-size:15px;color:#b9d8d0;font-weight:600;margin-left:5px}
-    .rate{font-size:13px;color:#c1d1df;margin-top:12px;line-height:1.5}
-    .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin:19px 2px 0;line-height:1.5}
-    .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
-    .dot.error{background:#f6b56a}
-    .foot{color:#708198;font-size:11px;line-height:1.5;text-align:center;margin:17px 12px 0}
-    .foot a{color:#9db3ca}
-    @media(max-width:420px){body{padding:16px}.card{padding:22px;border-radius:20px}}
+    :root {
+      color-scheme: dark;
+      --bg:#08111f; --panel:#111e30; --panel-2:#0c1728;
+      --text:#f4f7fb; --muted:#9aabc1; --accent:#67e8b5;
+      --line:#263850; --good:#67e8b5; --warn:#f6bd70; --danger:#ff8585;
+    }
+    * { box-sizing:border-box }
+    body {
+      margin:0; min-height:100vh; min-height:100svh; padding:24px;
+      display:grid; place-items:center;
+      background:radial-gradient(ellipse at 50% 0%,#1b3450 0%,var(--bg) 58%);
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    main { width:min(100%,490px) }
+    .brand { display:flex; align-items:center; gap:11px; margin:0 0 19px 3px }
+    .brand-mark {
+      width:39px;height:39px;border-radius:13px;display:grid;place-items:center;
+      background:#153c38;color:var(--accent);font-size:21px;font-weight:800;
+      border:1px solid #28645a;
+    }
+    .brand-name { font-size:13px;font-weight:800;letter-spacing:.12em }
+    .brand-sub { color:var(--muted);font-size:11px;margin-top:3px;letter-spacing:.04em }
+    .card {
+      background:rgba(17,30,48,.96);border:1px solid var(--line);
+      border-radius:25px;padding:clamp(21px,5vw,30px);
+      box-shadow:0 25px 80px #0006;
+    }
+    .eyebrow { color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px }
+    h1 { margin:0;font-size:clamp(27px,7vw,35px);line-height:1.1;letter-spacing:-.045em }
+    .subtitle { color:var(--muted);font-size:14px;line-height:1.55;margin:10px 0 25px }
+    label { display:block;color:#c5d2e2;font-size:13px;font-weight:700;margin:0 0 9px }
+    .input-wrap {
+      display:flex;align-items:center;gap:10px;padding:0 15px;
+      background:var(--panel-2);border:1px solid #3a4c65;border-radius:15px;
+      transition:border .2s,box-shadow .2s;
+    }
+    .input-wrap:focus-within { border-color:var(--accent);box-shadow:0 0 0 3px #67e8b522 }
+    .prefix { color:#c1cfdf;font-size:18px;font-weight:750 }
+    input {
+      width:100%;min-width:0;padding:17px 0;background:transparent;border:0;outline:0;
+      color:var(--text);font:700 27px/1.3 inherit;font-size:27px;
+    }
+    input::placeholder { color:#62748c }
+    .pair { display:flex;align-items:center;justify-content:center;gap:12px;color:#c1cfdf;font-size:13px;font-weight:700;margin:18px 0 }
+    .flag { font-size:19px;vertical-align:-2px;margin-right:4px }
+    .arrow { width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#1b2d43;color:var(--accent);font-size:18px }
+    .result {
+      padding:20px;border-radius:18px;
+      background:linear-gradient(135deg,#123b37,#102b32);
+      border:1px solid #28645a;
+    }
+    .result-label { color:#b9d8d0;font-size:13px;margin-bottom:9px }
+    .result-line { display:flex;align-items:flex-start;justify-content:space-between;gap:10px }
+    .amount { min-width:0;overflow-wrap:anywhere;color:#eafff7;font-size:clamp(29px,8vw,39px);font-weight:800;letter-spacing:-.045em;line-height:1.15 }
+    .currency { color:#b9d8d0;font-size:13px;font-weight:800;padding-top:7px }
+    .result-actions { display:flex;gap:8px;margin-top:16px }
+    button {
+      border:1px solid #42665f;background:#173e39;color:#eafff7;border-radius:11px;
+      min-height:42px;padding:9px 13px;font:700 12px inherit;font-size:12px;font-weight:750;
+      cursor:pointer;transition:transform .15s,background .15s;
+    }
+    button:active { transform:scale(.98) }
+    button:focus-visible { outline:2px solid var(--accent);outline-offset:3px }
+    button.secondary { background:#17283c;border-color:#344b65;color:#d8e4f2 }
+    button:disabled { opacity:.55;cursor:wait }
+    .rate { color:#c1d1df;font-size:13px;line-height:1.5;margin-top:14px }
+    .status { display:flex;align-items:flex-start;gap:9px;color:var(--muted);font-size:12px;line-height:1.5;margin:17px 2px 0 }
+    .dot { width:8px;height:8px;border-radius:50%;background:var(--good);margin-top:4px;flex:none }
+    .dot.warn { background:var(--warn) }
+    .dot.error { background:var(--danger) }
+    .tools { display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px }
+    .text-button { background:transparent;border:0;color:#a9bfd5;padding:6px 0;min-height:32px }
+    .text-button:hover { color:var(--accent) }
+    .foot { color:#788ba3;font-size:11px;line-height:1.6;text-align:center;margin:17px 12px 0 }
+    .foot strong { color:#b7c8da }
+    .foot a { color:#a9c4dc }
+    .toast { min-height:18px;text-align:center;color:var(--accent);font-size:12px;margin-top:8px }
+    @media(max-width:420px) {
+      body { padding:16px 13px }
+      .card { border-radius:21px }
+      .result { padding:17px }
+      input { font-size:25px }
+    }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important;transition:none!important } }
   </style>
 </head>
 <body>
   <main>
-    <div class="brand"><span class="brand-mark">↗</span><span>CONVERSOR DE MOEDAS</span></div>
-    <section class="card" aria-label="Conversor de real para peso argentino">
+    <header class="brand" aria-label="TEC SOLUTION">
+      <span class="brand-mark" aria-hidden="true">↗</span>
+      <div>
+        <div class="brand-name">TEC SOLUTION</div>
+        <div class="brand-sub">CONVERSOR DE MOEDAS · VERSÃO 2.0</div>
+      </div>
+    </header>
+
+    <section class="card" aria-label="Conversor de Real para Peso argentino">
+      <p class="eyebrow">Conversão rápida</p>
       <h1>Real para Peso Argentino</h1>
-      <p class="sub">Conversão rápida pela cotação de referência.</p>
+      <p class="subtitle">Consulte uma cotação de referência e calcule o valor em poucos segundos.</p>
 
       <label for="brl">Valor em reais (BRL)</label>
       <div class="input-wrap">
-        <span class="prefix">R$</span>
-        <input id="brl" type="number" inputmode="decimal" min="0" step="any" placeholder="100,00" value="100" autocomplete="off" aria-label="Valor em reais">
+        <span class="prefix" aria-hidden="true">R$</span>
+        <input id="brl" type="text" inputmode="decimal" autocomplete="off"
+          autocapitalize="off" spellcheck="false" placeholder="100,00" value="100"
+          aria-label="Digite o valor em reais">
       </div>
 
-      <div class="pair"><span>🇧🇷 BRL</span><span class="arrow" aria-hidden="true">↓</span><span>🇦🇷 ARS</span></div>
+      <div class="pair" aria-label="Real brasileiro convertido para Peso argentino">
+        <span><span class="flag">🇧🇷</span>BRL</span>
+        <span class="arrow" aria-hidden="true">↓</span>
+        <span><span class="flag">🇦🇷</span>ARS</span>
+      </div>
 
       <div class="result" aria-live="polite">
         <div class="result-label">Você recebe aproximadamente</div>
-        <div><span class="amount" id="ars">Carregando…</span><span class="currency">ARS</span></div>
+        <div class="result-line">
+          <span class="amount" id="ars">Carregando…</span>
+          <span class="currency">ARS</span>
+        </div>
+        <div class="result-actions">
+          <button id="copy" type="button" class="secondary" disabled>Copiar resultado</button>
+          <button id="refresh" type="button">↻ Atualizar cotação</button>
+        </div>
         <div class="rate" id="rate">Buscando cotação de referência…</div>
       </div>
 
-      <div class="status" role="status"><span class="dot" id="dot"></span><span id="status">Conectando à fonte de cotação…</span></div>
+      <div class="status" role="status" aria-live="polite">
+        <span class="dot" id="dot"></span>
+        <span id="status">Conectando à fonte de cotação…</span>
+      </div>
+      <div class="toast" id="toast" aria-live="polite"></div>
+      <div class="tools">
+        <button class="text-button" id="clear" type="button">Limpar valor</button>
+        <span class="brand-sub">Taxa indicativa · BRL / ARS</span>
+      </div>
     </section>
-    <p class="foot">Cotação de referência BRL/ARS. É uma taxa indicativa e pode diferir do valor praticado por bancos, cartões e casas de câmbio. Sem taxas ou margens incluídas.</p>
+
+    <footer class="foot">
+      Cotação de referência. O valor pode ser diferente daquele praticado por bancos, cartões e casas de câmbio.
+      Não inclui tarifas, impostos ou margens comerciais.<br>
+      Desenvolvido por <strong>Marconelly Martins</strong> · <strong>TEC SOLUTION</strong>
+    </footer>
   </main>
 
   <script>
-    const input = document.getElementById('brl');
-    const output = document.getElementById('ars');
-    const rateText = document.getElementById('rate');
-    const statusText = document.getElementById('status');
-    const dot = document.getElementById('dot');
-    let arsPerBrl = null;
-    let lastUpdated = null;
+    (() => {
+      'use strict';
+      const API_URL = 'https://open.er-api.com/v6/latest/BRL';
+      const CACHE_KEY = 'tec-conversor-brl-ars-v2';
+      const REFRESH_INTERVAL = 30 * 60 * 1000;
+      const $ = (id) => document.getElementById(id);
+      const input = $('brl'), output = $('ars'), rateText = $('rate');
+      const statusText = $('status'), dot = $('dot');
+      const refreshButton = $('refresh'), copyButton = $('copy');
+      let arsPerBrl = null, lastUpdated = null, isLoading = false;
 
-    const money = (value, currency, maximumFractionDigits = 2) =>
-      new Intl.NumberFormat('pt-BR', { style: 'currency', currency, maximumFractionDigits }).format(value);
-
-    function render() {
-      const brl = Number(input.value);
-      if (!Number.isFinite(brl) || brl < 0 || input.value.trim() === '') {
-        output.textContent = '—';
-        return;
+      function parseAmount(value) {
+        const normalized = String(value).trim().replace(/\s/g, '').replace(',', '.');
+        if (!normalized) return null;
+        const number = Number(normalized);
+        return Number.isFinite(number) && number >= 0 ? number : null;
       }
-      if (arsPerBrl === null) {
-        output.textContent = '…';
-        return;
-      }
-      output.textContent = new Intl.NumberFormat('pt-BR', {
-        minimumFractionDigits: 2, maximumFractionDigits: 2
-      }).format(brl * arsPerBrl);
-    }
 
-    async function loadRate() {
-      statusText.textContent = 'Atualizando cotação de referência…';
-      dot.classList.remove('error');
-      try {
-        // Endpoint público, sem chave: taxa mais recente com BRL como moeda-base.
-        const response = await fetch('https://open.er-api.com/v6/latest/BRL', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Falha HTTP ' + response.status);
-        const data = await response.json();
-        if (data.result !== 'success' || !data.rates || !Number.isFinite(data.rates.ARS)) {
-          throw new Error('Cotação BRL/ARS indisponível');
+      function formatNumber(value, digits = 2) {
+        return new Intl.NumberFormat('pt-BR', {
+          minimumFractionDigits: digits,
+          maximumFractionDigits: digits
+        }).format(value);
+      }
+
+      function render() {
+        const amount = parseAmount(input.value);
+        if (amount === null) {
+          output.textContent = input.value.trim() ? 'Valor inválido' : '—';
+          copyButton.disabled = true;
+          return;
         }
-        arsPerBrl = data.rates.ARS;
-        lastUpdated = data.time_last_update_utc || '';
-        render();
-        const updated = lastUpdated ? new Date(lastUpdated).toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short', timeZone:'UTC' }) + ' UTC' : 'horário não informado';
-        rateText.textContent = '1 BRL = ' + new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(arsPerBrl) + ' ARS';
-        statusText.textContent = 'Cotação atualizada: ' + updated + '. Atualização automática a cada 30 minutos.';
-      } catch (error) {
-        dot.classList.add('error');
-        statusText.textContent = arsPerBrl === null
-          ? 'Não foi possível carregar a cotação. Verifique sua conexão e tente novamente.'
-          : 'Sem conexão para atualizar. Exibindo a última cotação carregada.';
         if (arsPerBrl === null) {
-          output.textContent = 'Indisponível';
-          rateText.textContent = 'A cotação será exibida quando a conexão for restabelecida.';
+          output.textContent = 'Aguardando cotação';
+          copyButton.disabled = true;
+          return;
+        }
+        output.textContent = formatNumber(amount * arsPerBrl, 2);
+        copyButton.disabled = false;
+      }
+
+      function setStatus(message, state = 'good') {
+        statusText.textContent = message;
+        dot.className = 'dot' + (state === 'warn' ? ' warn' : state === 'error' ? ' error' : '');
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) return 'horário não informado';
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return 'horário não informado';
+        return new Intl.DateTimeFormat('pt-BR', {
+          dateStyle: 'short', timeStyle: 'short', timeZone: 'UTC'
+        }).format(date) + ' UTC';
+      }
+
+      function saveCache() {
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            rate: arsPerBrl, updated: lastUpdated, savedAt: Date.now()
+          }));
+        } catch (_) { /* Armazenamento local pode estar indisponível. */ }
+      }
+
+      function loadCache() {
+        try {
+          const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+          if (cached && Number.isFinite(cached.rate) && cached.rate > 0) {
+            arsPerBrl = cached.rate;
+            lastUpdated = cached.updated || null;
+            render();
+            rateText.textContent = '1 BRL = ' + formatNumber(arsPerBrl, 4) + ' ARS';
+            const age = cached.savedAt ? Date.now() - cached.savedAt : Infinity;
+            const ageLabel = age < 24 * 60 * 60 * 1000 ? 'Última cotação salva neste dispositivo: ' : 'Cotação salva anteriormente: ';
+            setStatus(ageLabel + formatDate(lastUpdated) + '. Tentando atualizar…', 'warn');
+          }
+        } catch (_) { /* Cache inválido ou indisponível: consulta normal. */ }
+      }
+
+      async function loadRate() {
+        if (isLoading) return;
+        isLoading = true;
+        refreshButton.disabled = true;
+        refreshButton.textContent = 'Atualizando…';
+        setStatus('Consultando a cotação de referência…', 'warn');
+        try {
+          const response = await fetch(API_URL, { cache: 'no-store' });
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          const data = await response.json();
+          const rate = data && data.rates && data.rates.ARS;
+          if (data.result !== 'success' || !Number.isFinite(rate) || rate <= 0) {
+            throw new Error('Resposta de cotação inválida');
+          }
+          arsPerBrl = rate;
+          lastUpdated = data.time_last_update_utc || null;
+          saveCache();
+          render();
+          rateText.textContent = '1 BRL = ' + formatNumber(arsPerBrl, 4) + ' ARS · Cotação atualizada em ' + formatDate(lastUpdated);
+          setStatus('Cotação carregada com sucesso. Nova consulta automática em 30 minutos.', 'good');
+        } catch (error) {
+          if (arsPerBrl !== null) {
+            setStatus('Não foi possível atualizar. Exibindo a última cotação disponível.', 'warn');
+            rateText.textContent = '1 BRL = ' + formatNumber(arsPerBrl, 4) + ' ARS · Última atualização: ' + formatDate(lastUpdated);
+          } else {
+            setStatus('Não foi possível carregar a cotação. Verifique sua conexão e tente novamente.', 'error');
+            output.textContent = 'Indisponível';
+            rateText.textContent = 'A cotação aparecerá quando a conexão for restabelecida.';
+          }
+        } finally {
+          isLoading = false;
+          refreshButton.disabled = false;
+          refreshButton.textContent = '↻ Atualizar cotação';
         }
       }
-    }
 
-    input.addEventListener('input', render);
-    loadRate();
-    setInterval(loadRate, 30 * 60 * 1000);
+      input.addEventListener('input', () => {
+        $('toast').textContent = '';
+        render();
+      });
+
+      refreshButton.addEventListener('click', loadRate);
+      $('clear').addEventListener('click', () => {
+        input.value = '';
+        input.focus();
+        $('toast').textContent = '';
+        render();
+      });
+
+      copyButton.addEventListener('click', async () => {
+        const amount = parseAmount(input.value);
+        if (amount === null || arsPerBrl === null) return;
+        const result = formatNumber(amount * arsPerBrl, 2) + ' ARS';
+        try {
+          await navigator.clipboard.writeText(result);
+          $('toast').textContent = 'Resultado copiado: ' + result;
+        } catch (_) {
+          $('toast').textContent = 'Não foi possível copiar automaticamente neste navegador.';
+        }
+      });
+
+      loadCache();
+      render();
+      loadRate();
+      window.setInterval(loadRate, REFRESH_INTERVAL);
+    })();
   </script>
 </body>
 </html>
